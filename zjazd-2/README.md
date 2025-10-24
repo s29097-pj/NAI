@@ -26,6 +26,51 @@ System wykorzystuje zbiory rozmyte i reguły językowe do podejmowania decyzji, 
 - Python 3.8 lub nowszy
 - pip (menedżer pakietów)
 
+## 📚 Frameworki i biblioteki
+
+### Główne biblioteki:
+
+#### 1. **scikit-fuzzy (skfuzzy)** - Najważniejsza!
+   - **Wersja:** 0.5.0+
+   - **Przeznaczenie:** Implementacja logiki rozmytej (fuzzy logic)
+   - **Wykorzystanie w projekcie:**
+     - `ctrl.Antecedent()` - definiowanie zmiennych wejściowych
+     - `ctrl.Consequent()` - definiowanie zmiennych wyjściowych
+     - `fuzz.trimf()` - definiowanie funkcji przynależności (trójkątnych)
+     - `ctrl.Rule()` - definiowanie reguł rozmytych
+     - `ctrl.ControlSystem()` - system sterujący
+     - `ctrl.ControlSystemSimulation()` - symulacja systemu
+
+#### 2. **NumPy (numpy)**
+   - **Wersja:** 1.20.0+
+   - **Przeznaczenie:** Operacje na tablicach i wektorach
+   - **Wykorzystanie w projekcie:**
+     - `np.arange()` - generowanie zakresów wartości dla zmiennych
+     - Operacje matematyczne na danych
+
+#### 3. **Matplotlib (matplotlib)**
+   - **Wersja:** 3.5.0+
+   - **Przeznaczenie:** Wizualizacja danych i tworzenie wykresów
+   - **Wykorzystanie w projekcie:**
+     - `plt.subplots()` - tworzenie figury z wieloma wykresami
+     - `plt.bar()` - wykresy słupkowe
+     - `plt.plot()` - wykresy liniowe
+     - `plt.fill_between()` - wypełnianie obszarów pod wykresami
+     - `plt.savefig()` - zapisywanie wykresów do pliku PNG
+
+#### 4. **NetworkX (networkx)**
+   - **Wersja:** 2.0+
+   - **Przeznaczenie:** Obsługa grafów (wymagane przez scikit-fuzzy)
+   - **Wykorzystanie:** Automatyczne (jako zależność scikit-fuzzy)
+
+#### 5. **Packaging (packaging)**
+   - **Wersja:** 21.0+
+   - **Przeznaczenie:** Zarządzanie wersjami pakietów (wymagane przez scikit-fuzzy)
+   - **Wykorzystanie:** Automatyczne (jako zależność scikit-fuzzy)
+
+### Język programowania:
+- **Python 3.8+** (testowane na Python 3.13)
+
 ## 📦 Instalacja
 
 ### Krok 1: Zaktualizuj pip (opcjonalnie, ale zalecane)
@@ -79,7 +124,7 @@ INTELIGENTNY STEROWNIK OGRZEWANIA - LOGIKA ROZMYTA
   Opis: Całkiem ciepło na zewnątrz, wewnątrz komfort, ale wilgotno - zmniejsz grzanie
   Wejścia:  temp_pom=22°C, temp_zewn=10°C, wilgotność=80%
   WYJŚCIE:  moc grzania = 38.0%
-  Interpretacja: 🔥 GRZANIE ŚREDNIE
+  Interpretacja: ❄️ MINIMALNE GRZANIE
 
 [PRZYPADEK 3] CIEPŁY DZIEŃ - POMIESZCZENIE CIEPŁE
   Opis: Umiarkowana wilgotność, pomieszczenie już ciepłe - praktycznie brak grzania
@@ -96,7 +141,7 @@ INTELIGENTNY STEROWNIK OGRZEWANIA - LOGIKA ROZMYTA
 
 ### Wizualizacja wyników:
 
-Po wyświetleniu scenariuszy testowych system automatycznie wygeneruje 4 profesjonalne wykresy:
+Po wyświetleniu scenariuszy testowych system automatycznie wygeneruje 4 profesjonalne wykresy zapisane do pliku `fuzzy_heating_results.png`:
 
 1. **Moc Grzania dla Każdego Scenariusza** - wykres słupkowy pokazujący porównanie mocy
 2. **Wpływ Temperatury Wewnątrz** - jak zmiana temperatury pomieszczenia wpływa na moc grzania
@@ -108,18 +153,16 @@ Wykresy pomogą zrozumieć zależności między wejściami a wyjściem systemu.
 ### Użycie w własnym kodzie:
 
 ```python
-from fuzzy_heating import heating_sim
+from fuzzy_heating import calculate_heating
 
-# Podaj wartości wejściowe
-heating_sim.input['temp_room'] = 18
-heating_sim.input['temp_outside'] = -5
-heating_sim.input['humidity'] = 45
+# Oblicz moc grzania dla konkretnych parametrów
+moc = calculate_heating(
+    temp_room=20,      # temperatura pomieszczenia w °C
+    temp_outside=5,    # temperatura zewnętrzna w °C
+    humidity=60        # wilgotność w %
+)
 
-# Oblicz wynik
-heating_sim.compute()
-
-# Odczytaj moc ogrzewania
-print(f"Zalecana moc grzania: {heating_sim.output['heating_power']:.1f}%")
+print(f"Zalecana moc grzania: {moc:.1f}%")
 ```
 
 ## 🧠 Logika systemu
@@ -151,14 +194,15 @@ Każda zmienna wejściowa i wyjściowa posiada zdefiniowane funkcje przynależno
 fuzzy-heating-controller/
 ├── fuzzy_heating.py       # Główny plik z całą implementacją
 ├── README.md              # Ten plik - dokumentacja projektu
-└── requirements.txt       # Lista wszystkich zależności
+├── requirements.txt       # Lista wszystkich zależności
+└── fuzzy_heating_results.png  # Wykresy (generowane podczas uruchomienia)
 ```
 
 ## 📝 Dokumentacja kodu
 
 Kod zawiera:
 - **Pełną dokumentację** na początku pliku (opis problemu, autorzy, instrukcja)
-- **Bardzo szczegółowe komentarze** do każdego kroku (8 sekcji logiczne)
+- **Bardzo szczegółowe komentarze** do każdego kroku (9 sekcji logiczne)
 - **Docstringi** dla każdej funkcji wyjaśniające jej działanie
 - **Nazwy zmiennych** zgodne z konwencją PEP 8
 - **Formatowanie** ułatwiające czytanie i zrozumienie kodu
